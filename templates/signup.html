@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock title %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Sign Up</h2>
+    <form method="post" action="{{ url_for('signup_page') }}">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="surname" class="form-label">Surname</label>
+        <input type="text" class="form-control" id="surname" name="surname" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <div class="mb-3">
+        <label for="country" class="form-label">Country</label>
+        <select class="form-select2" id="dropdownListCountry" aria-label="Default select example" name="country" required>
+          <option selected disabled>Select Country</option>
+          <option value="country1">Türkiye</option>
+          <option value="country2">Rusya</option>
+          <option value="country3">Almanya</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="city" class="form-label">City</label>
+        <select class="form-select2" id="dropdownListCity" aria-label="Default select example" name="city" required>
+          <option selected disabled>Select City</option>
+          <option value="city1">İstanbul</option>
+          <option value="city2">İzmir</option>
+          <option value="city2">Ankara</option>
+        </select>
+      </div>
+
+  <button type="submit" class="btn btn-primary">Sign Up</button>
+</form>
+</div>
+
+<script>
+  const mockApiEndpoint = 'https://run.mocky.io/v3/d44d5d18-a90a-4797-bd28-d4fa4ff2fd57';
+
+  fetch(mockApiEndpoint)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          const countryDropdown = document.getElementById('dropdownListCountry');
+          const cityDropdown = document.getElementById('dropdownListCity');
+
+          // Clear existing options
+          countryDropdown.innerHTML = '<option selected disabled>Select Country</option>';
+          cityDropdown.innerHTML = '<option selected disabled>Select City</option>';
+
+          // Add options from the API response
+          for (const key in data) {
+              if (data.hasOwnProperty(key)) {
+                  // Add options to the country dropdown
+                  const countryOption = document.createElement('option');
+                  countryOption.value = key;
+                  countryOption.text = data[key];
+                  countryDropdown.appendChild(countryOption);
+
+                  // Add options to the city dropdown
+                  const cityOption = document.createElement('option');
+                  cityOption.value = key;
+                  cityOption.text = data[key];
+                  cityDropdown.appendChild(cityOption);
+              }
+          }
+      })
+      .catch(error => console.error('Error fetching data:', error));
+</script>
+
+
+{% endblock content %}
+
+
+                                              

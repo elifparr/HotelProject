@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<form method="GET" action="{{ url_for('search_results') }}">
+    <input type="text" name="city" placeholder="City" required>
+    <input type="date" name="checkin" placeholder="Start Date" required>
+    <input type="date" name="checkout" placeholder="Finish Date" required>
+    <input type="number" name="guests" placeholder="Guest" min="1" required>
+    <button type="submit">Search</button>
+</form>
+
+
+
+<div class="container mt-4">
+    <h2>Hotels</h2>
+
+    <div class="row">
+        {% for hotel in hotels|sort(attribute='5', reverse=True) %}
+            <div class="col-md-3 mb-4">
+              {% if user and hotel[2] == user['country'] %}
+              <div class="card">
+                  <!-- Debug information -->
+                  
+                        <img src="{{ url_for('static', filename=hotel[9]) }}" class="card-img-top" alt="Product Image"
+                            style="height: 500px; object-fit: cover;">
+                        <div class="card-body">
+                            <p class="card-text">{{ hotel[5] }}/10.0 ( {{hotel[6]}} yorum ) </p>
+                            <h5 class="card-title">{{ hotel[1] }}</h5>
+                            <p class="card-text">{{ hotel[3] }}</p>
+                            <p class="card-text" style="color: #ff0000;">
+                                {{ hotel[4] - (hotel[4]* hotel [7])/100}} ₺
+                            </p>
+                            <a href="{{url_for('detail', id=hotel[0])}} " class="btn btn-primary">Details</a>
+                            <p class="card-text">Üyelere Özel Fiyat Gösteriliyor</p>
+                        </div>
+                    </div>
+                    {% elif not user %}
+                    <div class="card">
+                        <!-- Debug information -->
+                        
+                        <img src="{{ url_for('static', filename=hotel[9]) }}" class="card-img-top" alt="Product Image"
+                            style="height: 500px; object-fit: cover;">
+                        <div class="card-body">
+                            <p class="card-text">{{ hotel[5] }}/10.0 ( {{hotel[6]}} yorum ) </p>
+                            <h5 class="card-title">{{ hotel[1] }}</h5>
+                            <p class="card-text">{{ hotel[3] }}</p>
+                            <p class="card-text" style="color: #ff0000;">{{ hotel[4] }} ₺</p>
+                            <a href="{{url_for('detail', id=hotel[0])}} " class="btn btn-primary">Details</a>
+                            <a href="" class="btn btn-primary">Üyelere Özel Fiyat için Giriş Yapın</a>
+                        </div>
+                    </div>
+                    
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
